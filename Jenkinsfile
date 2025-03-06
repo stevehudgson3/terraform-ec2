@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/stevehudgson3/terraform-ec2.git'
+                git branch: 'main', url: 'https://github.com/stevehudgson3/terraform-ec2.git'
             }
         }
 
