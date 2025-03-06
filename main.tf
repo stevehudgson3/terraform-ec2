@@ -1,38 +1,40 @@
 provider "aws" {
-  region = "us-east-2" # Change to your preferred region
+  region = "us-east-2" # Change to your preferred AWS region
 }
 
-resource "aws_instance" "rocky_linux" {
-  ami           = data.aws_ami.rocky.id
-  instance_type = "t3.micro" # Change based on your needs
-  key_name      = "devops" # Replace with your actual key pair name
-
-  security_groups = [aws_security_group.ssh_access.name]
-
-  tags = {
-    Name = "RockyLinux-Server"
-  }
-}
-
-data "aws_ami" "rocky" {
+# Fetch the latest RHEL AMI
+data "aws_ami" "rhel" {
   most_recent = true
-  owners      = ["679593333241"] # Rocky Linux official AWS account ID
+  owners      = ["309956199498"] # Red Hat's official AWS account ID
 
   filter {
     name   = "name"
-    values = ["Rocky-9-*-x86_64"] # Adjust for version preference (e.g., "Rocky-8-*")
+    values = ["RHEL-9*-x86_64*"] # Latest RHEL 9 AMI
   }
 }
 
+resource "aws_instance" "rhel_free_tier" {
+  ami           = data.aws_ami.rhel.id
+  instance_type = "t2.micro" # Free Tier eligible
+  key_name      = "devops" # Replace with your key pair name
+
+  vpc_security_group_ids = [aws_security_group.ssh_access.id]
+
+  tags = {
+    Name = "RHEL-Free-Tier"
+  }
+}
+
+# Security Group to allow SSH (port 22)
 resource "aws_security_group" "ssh_access" {
-  name        = "rocky_linux_sg"
+  name        = "rhel_ssh_sg"
   description = "Allow SSH inbound traffic"
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Change this to restrict access (e.g., your IP)
+    cidr_blocks = ["0.0.0.0/0"] # Change to restrict access (e.g., your IP)
   }
 
   egress {

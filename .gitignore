@@ -1,0 +1,35 @@
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Ignore crash logs
+crash.log
+*.crash.log
+
+# Ignore Terraform plan files
+*.tfplan
+
+# Ignore Terraform lock file
+.terraform.lock.hcl
+
+# Ignore Terraform cache directory
+.terraform/
+
+# Ignore environment variables
+.env
+.envrc
+
+# Ignore backup files created by Terraform
+*.backup
+
+# Ignore SSH keys (if stored locally)
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+
+# Ignore sensitive AWS credentials (if using environment files)
+.aws/
+
+# Ignore VS Code settings (if using VS Code)
+.vscode/
