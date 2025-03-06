@@ -14,19 +14,25 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform init'
+                withAWS(credentials: 'aws-creds', region: 'us-east-2') {
+                    sh 'terraform init'
+                }
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                sh 'terraform plan'
+                withAWS(credentials: 'aws-creds', region: 'us-east-2') {
+                    sh 'terraform plan'
+                }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -auto-approve'
+                withAWS(credentials: 'aws-creds', region: 'us-east-2') {
+                    sh 'terraform apply -auto-approve'
+                }
             }
         }
     }
