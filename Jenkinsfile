@@ -35,5 +35,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Terraform Destroy') {
+            when {
+                beforeAgent true
+                expression { return params.DESTROY == 'true' }
+            }
+            steps {
+                withAWS(credentials: 'aws-creds', region: 'us-east-2') {
+                    sh 'terraform destroy -auto-approve'
+                }
+            }
+        }
     }
 }
